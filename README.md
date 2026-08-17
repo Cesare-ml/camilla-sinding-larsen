@@ -139,5 +139,6 @@ Most tour and hero photographs are still served from the existing `guideitoscana
 ## Documentation
 
 - [`docs/ASTRO-MIGRATION.md`](docs/ASTRO-MIGRATION.md)
+- [`docs/CONVERSION-SERVICE-PAGES.md`](docs/CONVERSION-SERVICE-PAGES.md) — proposta di sviluppo delle pagine per conversione, vendita e valorizzazione di Camilla
 - [`docs/GROWTH-SEO-ARCHITECTURE.md`](docs/GROWTH-SEO-ARCHITECTURE.md)
 - [`docs/PROJECT.md`](docs/PROJECT.md)
