@@ -1,0 +1,12 @@
+---
+import type { Locale } from '../lib/paths';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const footerLabel = locale === 'nb' ? 'Guidede turer i Toscana' : 'Guided Tours in Tuscany';
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <p>© <span data-year></span> Camilla Sinding-Larsen · {footerLabel}</p>
+    <p><a href="mailto:camilla@guideitoscana.com">camilla@guideitoscana.com</a></p>
+  </div>
+</footer>

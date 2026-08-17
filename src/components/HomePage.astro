@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TourCard from './TourCard.astro';
+import { heroSlides, homeCopy, profileImage } from '../data/home';
+import { toursByLocale } from '../data/tours';
+import { type Locale } from '../lib/paths';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const copy = homeCopy[locale];
+const tours = toursByLocale[locale];
+---
+<BaseLayout locale={locale} title={copy.title} description={copy.description} ogImage={heroSlides[0]}>
+  <main id="top">
+    <section class="hero" aria-label={copy.hero.title}>
+      <div class="slides" aria-hidden="true">
+        {heroSlides.map((src, i) => <div class:list={['slide', { 'is-active': i === 0 }]} data-slide style={`background-image:url('${src}')`}></div>)}
+      </div>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">{copy.hero.eyebrow}</p>
+          <h1>{copy.hero.title}</h1>
+          <p class="hero-subtitle">{copy.hero.subtitle}</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#tours">{copy.hero.toursCta}</a>
+            <a class="btn btn-ghost" href="#contact">{copy.hero.contactCta}</a>
+          </div>
+        </div>
+      </div>
+      <div class="slider-dots" aria-label={locale === 'nb' ? 'Bilder' : 'Hero images'}>
+        {heroSlides.map((_, i) => <button class:list={['slider-dot', { 'is-active': i === 0 }]} type="button" data-slide-dot aria-label={`${locale === 'nb' ? 'Bilde' : 'Image'} ${i + 1}`} aria-current={i === 0 ? 'true' : undefined}></button>)}
+      </div>
+    </section>
+
+    <section aria-labelledby="intro-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">{copy.intro.eyebrow}</p>
+          <h2 class="section-title" id="intro-title">{copy.intro.title}</h2>
+          <p class="section-lead">{copy.intro.lead}</p>
+        </div>
+        <div class="intro-grid">
+          {copy.intro.cards.map(([title, text]: [string, string]) => <article class="intro-card"><h3>{title}</h3><p>{text}</p></article>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div class="profile-image-wrap"><img class="profile-image" src={profileImage} alt="Camilla Sinding-Larsen" /></div>
+        <div class="about-copy">
+          <p class="eyebrow">{copy.about.eyebrow}</p>
+          <h2 class="section-title" id="about-title">{copy.about.title}</h2>
+          {copy.about.paragraphs.map((text: string) => <p>{text}</p>)}
+          <div class="profile-meta">
+            <strong>{copy.about.languages}</strong>
+            <a href="mailto:camilla@guideitoscana.com">camilla@guideitoscana.com</a>
+            <a href="tel:+393336369950">+39 333 6369950</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tours" id="tours" aria-labelledby="tours-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">{copy.tours.eyebrow}</p>
+          <h2 class="section-title" id="tours-title">{copy.tours.title}</h2>
+          <p class="section-lead">{copy.tours.lead}</p>
+        </div>
+        <div class="tour-grid">
+          {tours.map((tour) => <TourCard tour={tour} locale={locale} label={copy.tours.link} />)}
+        </div>
+        <p class="custom-note">{copy.tours.custom}</p>
+      </div>
+    </section>
+
+    <section class="prices" id="prices" aria-labelledby="prices-title">
+      <div class="container">
+        <div class="section-intro"><p class="eyebrow">{copy.prices.eyebrow}</p><h2 class="section-title" id="prices-title">{copy.prices.title}</h2></div>
+        <div class="price-grid">
+          <article class="price-card"><h3>{copy.prices.half}</h3><p>{copy.prices.halfTime}</p><span class="price-value">€170</span></article>
+          <article class="price-card"><h3>{copy.prices.full}</h3><p>{copy.prices.fullTime}</p><span class="price-value">€340</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <div class="container contact-grid">
+        <div><p class="eyebrow">{copy.contact.eyebrow}</p><h2 class="section-title" id="contact-title">{copy.contact.title}</h2><p class="section-lead">{copy.contact.lead}</p></div>
+        <div class="contact-card"><h3>Camilla Sinding-Larsen</h3><p>{copy.contact.languages}</p><p><a href="mailto:camilla@guideitoscana.com">camilla@guideitoscana.com</a></p><p><a href="tel:+393336369950">+39 333 6369950</a></p></div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

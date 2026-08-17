@@ -1,0 +1,13 @@
+---
+import type { Tour } from '../data/tours';
+import { tourPath, type Locale } from '../lib/paths';
+interface Props { tour: Tour; locale: Locale; label: string; }
+const { tour, locale, label } = Astro.props;
+---
+<a class="tour-card" href={tourPath(locale, tour.slug)} aria-label={`${tour.title} — ${label}`}>
+  <img src={tour.cardImage} alt={tour.title} loading="lazy" />
+  <div class="tour-card-content">
+    <h3 class="tour-title">{tour.title}</h3>
+    <span class="tour-link">{label}</span>
+  </div>
+</a>

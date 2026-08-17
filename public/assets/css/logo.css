@@ -1,0 +1,23 @@
+.brand {
+  display: block;
+  flex: 0 0 auto;
+  width: 224px;
+  height: 68px;
+  overflow: hidden;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  background: url('../img/logo-guide-i-toscana.png') no-repeat left center / contain;
+}
+
+.brand:hover,
+.brand:focus-visible {
+  color: transparent;
+}
+
+@media (max-width: 600px) {
+  .brand {
+    width: 178px;
+    height: 55px;
+  }
+}

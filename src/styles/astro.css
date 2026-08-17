@@ -1,0 +1,9 @@
+.tour-card {
+  display: block;
+  text-decoration: none;
+}
+
+.tour-card .tour-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

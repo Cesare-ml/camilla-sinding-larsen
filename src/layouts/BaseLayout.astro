@@ -1,0 +1,41 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { assetPath, type Locale } from '../lib/paths';
+import '../styles/astro.css';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  currentTourSlug?: string;
+  tourPage?: boolean;
+  ogImage?: string;
+}
+
+const { locale, title, description, currentTourSlug, tourPage = false, ogImage } = Astro.props;
+const mainScript = assetPath('js/main.js');
+---
+<!doctype html>
+<html lang={locale === 'nb' ? 'nb' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <link rel="stylesheet" href={assetPath('css/styles.css')} />
+    <link rel="stylesheet" href={assetPath('css/logo.css')} />
+    {tourPage && <link rel="stylesheet" href={assetPath('css/tour-pages.css')} />}
+  </head>
+  <body>
+    <Header locale={locale} currentTourSlug={currentTourSlug} />
+    <slot />
+    <Footer locale={locale} />
+    <script is:inline src={mainScript}></script>
+  </body>
+</html>

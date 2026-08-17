@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { toursByLocale, type Tour } from '../data/tours';
+import { homePath, tourPath, type Locale } from '../lib/paths';
+
+interface Props { locale: Locale; tour: Tour; }
+const { locale, tour } = Astro.props;
+const allTours = toursByLocale[locale];
+const nb = locale === 'nb';
+const labels = nb
+  ? { home: 'Hjem', tours: 'Turer', all: 'Alle turer', custom: 'Vi organiserer alle typer skreddersydde turer på forespørsel', languages: 'Guider på norsk, engelsk og italiensk' }
+  : { home: 'Home', tours: 'Tours', all: 'All tours', custom: 'We organize any customized tour on request', languages: 'Guides in Norwegian, English, Italian' };
+---
+<BaseLayout locale={locale} title={tour.metaTitle} description={tour.metaDescription} ogImage={tour.heroImage} currentTourSlug={tour.slug} tourPage>
+  <main>
+    <section class="tour-page-hero" style={`background-image:url('${tour.heroImage}')`}>
+      <div class="container tour-page-hero-inner">
+        <div class="breadcrumb"><a href={homePath(locale)}>{labels.home}</a><span>/</span><a href={`${homePath(locale)}#tours`}>{labels.tours}</a></div>
+        <h1>{tour.title}</h1>
+      </div>
+    </section>
+
+    <section class="tour-page-main">
+      <div class="container"><article class="tour-copy">{tour.body.map((paragraph) => <p set:html={paragraph}></p>)}</article></div>
+    </section>
+
+    {tour.gallery && tour.gallery.length > 0 && (
+      <section class="tour-gallery"><div class="container tour-gallery-grid">{tour.gallery.map((image) => <img src={image.src} alt={image.alt} loading="lazy" />)}</div></section>
+    )}
+
+    <section class="tour-related">
+      <div class="container tour-related-inner">
+        <h2>{labels.all}</h2>
+        <div class="tour-related-grid">
+          {allTours.map((item) => item.slug === tour.slug ? <span class="is-current">{item.title}</span> : <a href={tourPath(locale, item.slug)}>{item.title}</a>)}
+        </div>
+        <p class="custom-tour-request"><strong>{labels.custom}</strong></p>
+      </div>
+    </section>
+
+    <section class="tour-guide-contact">
+      <div class="container tour-guide-card">
+        <h2>Camilla Sinding-Larsen</h2>
+        <p>{labels.languages}</p>
+        <p><a href="mailto:camilla@guideitoscana.com">camilla@guideitoscana.com</a></p>
+        <p><a href="tel:+393336369950">+39 333 6369950</a></p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

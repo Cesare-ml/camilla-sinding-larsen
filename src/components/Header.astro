@@ -1,0 +1,33 @@
+---
+import { homePath, tourPath, type Locale } from '../lib/paths';
+
+interface Props {
+  locale: Locale;
+  currentTourSlug?: string;
+}
+
+const { locale, currentTourSlug } = Astro.props;
+const nb = locale === 'nb';
+const home = homePath(locale);
+const enLanguageHref = currentTourSlug ? tourPath('en', currentTourSlug) : homePath('en');
+const nbLanguageHref = currentTourSlug ? tourPath('nb', currentTourSlug) : homePath('nb');
+const labels = nb
+  ? { about: 'Om Camilla', tours: 'Våre turer', prices: 'Priser', contact: 'Kontakt', menu: 'Meny', languages: 'Språk' }
+  : { about: 'About', tours: 'Our tours', prices: 'Prices', contact: 'Contact', menu: 'Menu', languages: 'Languages' };
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href={home} aria-label="Guide i Toscana">GUIDE I TOSCANA</a>
+    <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu">{labels.menu}</button>
+    <ul class="menu" id="site-menu" data-menu>
+      <li><a href={`${home}#about`}>{labels.about}</a></li>
+      <li><a href={`${home}#tours`}>{labels.tours}</a></li>
+      <li><a href={`${home}#prices`}>{labels.prices}</a></li>
+      <li><a href={`${home}#contact`}>{labels.contact}</a></li>
+      <li class="language-switch" aria-label={labels.languages}>
+        <a href={enLanguageHref} aria-current={!nb ? 'page' : undefined}>EN</a>
+        <a href={nbLanguageHref} aria-current={nb ? 'page' : undefined}>NO</a>
+      </li>
+    </ul>
+  </div>
+</header>
