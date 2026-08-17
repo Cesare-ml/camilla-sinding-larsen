@@ -16,6 +16,12 @@
     });
   }
 
+  const tourPathMatch = window.location.pathname.match(/\/tours\/([^/]+)\/?$/);
+  const norwegianTourLink = document.querySelector('.language-switch a[href="../../nb/"]');
+  if (tourPathMatch && norwegianTourLink) {
+    norwegianTourLink.setAttribute('href', `../../nb/tours/${tourPathMatch[1]}/`);
+  }
+
   const slides = [...document.querySelectorAll('[data-slide]')];
   const dots = [...document.querySelectorAll('[data-slide-dot]')];
   let currentSlide = 0;
