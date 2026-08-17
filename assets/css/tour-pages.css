@@ -1,3 +1,5 @@
+@import url('./logo.css');
+
 .tour-page-hero {
   position: relative;
   min-height: 50vh;
