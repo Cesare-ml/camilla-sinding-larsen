@@ -52,7 +52,8 @@
   const modal = document.querySelector('[data-tour-modal]');
   const modalTitle = modal?.querySelector('[data-modal-title]');
   const modalBody = modal?.querySelector('[data-modal-body]');
-  const closeButton = modal?.querySelector('[data-modal-close]');
+  const closeButtons = modal ? [...modal.querySelectorAll('[data-modal-close]')] : [];
+  const primaryCloseButton = closeButtons[0];
   let lastTrigger = null;
 
   const defaultTours = {
@@ -111,11 +112,12 @@
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      closeButton?.focus();
+      primaryCloseButton?.focus();
     });
   });
 
-  closeButton?.addEventListener('click', closeModal);
+  closeButtons.forEach((button) => button.addEventListener('click', closeModal));
+
   modal?.addEventListener('click', (event) => {
     if (event.target === modal) closeModal();
   });
