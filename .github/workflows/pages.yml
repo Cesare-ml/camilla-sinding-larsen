@@ -30,6 +30,7 @@ jobs:
           mkdir -p _site
           cp index.html _site/index.html
           cp -R assets _site/assets
+          cp -R tours _site/tours
           cp -R nb _site/nb
           touch _site/.nojekyll
 
