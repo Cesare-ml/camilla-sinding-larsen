@@ -55,7 +55,7 @@
   const closeButton = modal?.querySelector('[data-modal-close]');
   let lastTrigger = null;
 
-  const tours = {
+  const defaultTours = {
     pitti: {
       title: 'Palazzo Pitti and Boboli Garden',
       body: 'A visit through the former Medici residence, its decorated rooms and important painting collection, followed by a walk in the Boboli Garden and its views over Florence.'
@@ -89,6 +89,8 @@
       body: 'A slower experience of Tuscany outside the major cities: villages, villas, olive groves, local food traditions and the landscape itself. The day can be tailored to the area, season and interests of the group.'
     }
   };
+
+  const tours = window.TOUR_COPY || defaultTours;
 
   function closeModal() {
     if (!modal) return;
