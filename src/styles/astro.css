@@ -7,3 +7,8 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.tour-card:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}

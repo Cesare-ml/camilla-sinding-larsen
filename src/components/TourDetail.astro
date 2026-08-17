@@ -10,6 +10,11 @@ const nb = locale === 'nb';
 const labels = nb
   ? { home: 'Hjem', tours: 'Turer', all: 'Alle turer', custom: 'Vi organiserer alle typer skreddersydde turer på forespørsel', languages: 'Guider på norsk, engelsk og italiensk' }
   : { home: 'Home', tours: 'Tours', all: 'All tours', custom: 'We organize any customized tour on request', languages: 'Guides in Norwegian, English, Italian' };
+
+function emphasizedParagraph(paragraph: string): string | null {
+  const match = paragraph.match(/^<strong>(.*)<\/strong>$/);
+  return match?.[1] ?? null;
+}
 ---
 <BaseLayout locale={locale} title={tour.metaTitle} description={tour.metaDescription} ogImage={tour.heroImage} currentTourSlug={tour.slug} tourPage>
   <main>
@@ -21,7 +26,14 @@ const labels = nb
     </section>
 
     <section class="tour-page-main">
-      <div class="container"><article class="tour-copy">{tour.body.map((paragraph) => <p set:html={paragraph}></p>)}</article></div>
+      <div class="container">
+        <article class="tour-copy">
+          {tour.body.map((paragraph) => {
+            const emphasized = emphasizedParagraph(paragraph);
+            return emphasized ? <p><strong>{emphasized}</strong></p> : <p>{paragraph}</p>;
+          })}
+        </article>
+      </div>
     </section>
 
     {tour.gallery && tour.gallery.length > 0 && (

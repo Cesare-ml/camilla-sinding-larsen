@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { homePath } from '../lib/paths';
+---
+<BaseLayout
+  locale="en"
+  title="Page not found | Camilla Sinding-Larsen"
+  description="The requested page could not be found."
+  indexable={false}
+  languageAlternates={false}
+>
+  <main>
+    <section aria-labelledby="not-found-title">
+      <div class="container section-intro">
+        <p class="eyebrow">404</p>
+        <h1 class="section-title" id="not-found-title">Page not found</h1>
+        <p class="section-lead">The page may have moved or the address may be incorrect.</p>
+        <div class="hero-actions">
+          <a class="btn" style="border-color: var(--line);" href={homePath('en')}>English home</a>
+          <a class="btn" style="border-color: var(--line);" href={homePath('nb')}>Norsk</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

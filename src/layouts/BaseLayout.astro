@@ -1,7 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { assetPath, type Locale } from '../lib/paths';
+import { assetPath, homePath, tourPath, type Locale } from '../lib/paths';
 import '../styles/astro.css';
 
 interface Props {
@@ -11,10 +11,29 @@ interface Props {
   currentTourSlug?: string;
   tourPage?: boolean;
   ogImage?: string;
+  indexable?: boolean;
+  languageAlternates?: boolean;
 }
 
-const { locale, title, description, currentTourSlug, tourPage = false, ogImage } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  currentTourSlug,
+  tourPage = false,
+  ogImage,
+  indexable = true,
+  languageAlternates = true
+} = Astro.props;
+
 const mainScript = assetPath('js/main.js');
+const siteRoot = Astro.site ?? new URL(Astro.url.origin);
+const canonicalUrl = new URL(Astro.url.pathname, siteRoot).toString();
+const socialImage = ogImage ? new URL(ogImage, siteRoot).toString() : undefined;
+const enAlternate = new URL(currentTourSlug ? tourPath('en', currentTourSlug) : homePath('en'), siteRoot).toString();
+const nbAlternate = new URL(currentTourSlug ? tourPath('nb', currentTourSlug) : homePath('nb'), siteRoot).toString();
+const ogLocale = locale === 'nb' ? 'nb_NO' : 'en_GB';
+const alternateOgLocale = locale === 'nb' ? 'en_GB' : 'nb_NO';
 ---
 <!doctype html>
 <html lang={locale === 'nb' ? 'nb' : 'en'}>
@@ -23,11 +42,28 @@ const mainScript = assetPath('js/main.js');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content={indexable ? 'index, follow' : 'noindex, nofollow'} />
     <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href={canonicalUrl} />
+    {languageAlternates && (
+      <>
+        <link rel="alternate" hreflang="en" href={enAlternate} />
+        <link rel="alternate" hreflang="nb" href={nbAlternate} />
+        <link rel="alternate" hreflang="x-default" href={enAlternate} />
+      </>
+    )}
+    <meta property="og:site_name" content="Guide i Toscana" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={alternateOgLocale} />
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {socialImage && <meta name="twitter:image" content={socialImage} />}
     <link rel="stylesheet" href={assetPath('css/styles.css')} />
     <link rel="stylesheet" href={assetPath('css/logo.css')} />
     {tourPage && <link rel="stylesheet" href={assetPath('css/tour-pages.css')} />}

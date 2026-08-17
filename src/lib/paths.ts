@@ -1,7 +1,8 @@
 export type Locale = 'en' | 'nb';
 
 export function withBase(path = ''): string {
-  const base = import.meta.env.BASE_URL || '/';
+  const rawBase = import.meta.env.BASE_URL || '/';
+  const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
   const cleanPath = path.replace(/^\/+/, '');
   return `${base}${cleanPath}`;
 }

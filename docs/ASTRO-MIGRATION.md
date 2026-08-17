@@ -6,24 +6,40 @@ Ricostruire la baseline corrente di Guide i Toscana con Astro senza cambiare int
 
 La migrazione vive nel branch `astro-rebuild`; `main` resta la baseline HTML/CSS/JS di riferimento.
 
-## Vincoli attuali
+## Stato attuale
 
-- GitHub Actions non viene usato in questa fase.
-- Il workflow esistente continua a essere limitato a `main`, quindi il branch Astro non lo attiva.
-- Il progetto deve essere eseguibile e verificabile localmente.
-- Output Astro: completamente statico / prerenderizzato.
-- English e Norsk devono generare le stesse pagine e mantenere lo switch lingua pagina-per-pagina.
-- Le 8 pagine tour mantengono gli slug attuali.
-- Il logo originale viene riutilizzato come asset locale.
-- Le immagini dei tour restano temporaneamente collegate al vecchio WordPress, come nella baseline.
+La migrazione strutturale è completata:
+
+- home English;
+- home Norsk;
+- 8 tour English;
+- 8 tour Norsk;
+- switch lingua pagina-per-pagina;
+- card tour interamente cliccabili tramite veri link HTML;
+- logo originale locale;
+- CSS della baseline mantenuto;
+- JavaScript ridotto alle sole funzioni realmente necessarie: menu mobile e slideshow;
+- output statico Astro;
+- canonical e hreflang EN/NB;
+- Open Graph e Twitter metadata;
+- sitemap XML;
+- robots.txt;
+- pagina 404 noindex;
+- TypeScript strict config.
+
+## GitHub Actions
+
+GitHub Actions non viene usato in questa fase. Il vecchio workflow Pages ereditato da `main` è stato rimosso dal branch Astro per evitare di legare la nuova architettura al deployment attuale.
+
+Quando gli utilizzi Actions torneranno disponibili si potrà scegliere liberamente tra GitHub Pages, Cloudflare Pages o un altro deploy statico.
 
 ## Stack
 
 - Astro 6
 - TypeScript
 - HTML statico generato al build
-- CSS della baseline riutilizzato senza redesign
-- JavaScript vanilla della baseline per menu e slideshow
+- CSS della baseline
+- JavaScript vanilla minimo
 - nessun backend
 - nessun database
 - nessun CMS in questa prima migrazione
@@ -39,7 +55,7 @@ npm install
 npm run dev
 ```
 
-Il sito locale è configurato alla root (`/`) e non al path GitHub Pages.
+Il primo `npm install` creerà anche `package-lock.json`; dopo aver verificato il build è consigliabile commetterlo nel branch per rendere le installazioni riproducibili.
 
 ## Build locale
 
@@ -64,8 +80,6 @@ $env:GITHUB_PAGES='true'
 npm run build
 ```
 
-Quando gli utilizzi GitHub Actions saranno nuovamente disponibili si potrà sostituire il vecchio workflow con il deploy Astro ufficiale oppure pubblicare `dist/` con il sistema desiderato.
-
 ## Struttura
 
 ```text
@@ -85,6 +99,9 @@ src/
     paths.ts
   pages/
     index.astro
+    404.astro
+    sitemap.xml.ts
+    robots.txt.ts
     nb/index.astro
     tours/[slug].astro
     nb/tours/[slug].astro
@@ -100,28 +117,38 @@ English e Norsk condividono lo stesso componente `TourDetail.astro`. Titolo, tes
 
 Questo evita di mantenere manualmente sedici pagine HTML quasi uguali e prepara il progetto a un successivo passaggio verso Content Collections o CMS.
 
-## CMS futuro
+## Pages CMS — passo successivo
 
-Questa migrazione non introduce ancora un CMS. La struttura Astro rende però semplice il passaggio successivo:
+Pages CMS non viene ancora configurato nel branch. Prima viene testato localmente.
 
-1. spostare articoli e, se opportuno, tour in Content Collections;
-2. collegare un CMS visuale/Git-based;
-3. permettere a Camilla di creare bozze e pubblicare articoli senza modificare codice.
+Dopo il test, il percorso consigliato è:
 
-## Criterio di parità con la baseline
+1. introdurre una Content Collection `journal` / `articles`;
+2. generare pagine articolo EN/NB da contenuti Markdown/MDX;
+3. aggiungere `.pages.yml` con campi editoriali chiari;
+4. consentire a Camilla di creare e modificare articoli da editor visuale;
+5. mantenere tour, prezzi e impostazioni come contenuti strutturati solo quando avremo deciso quali parti debba poter modificare autonomamente.
 
-Prima di considerare il branch pronto da sostituire a `main`, verificare:
+## Immagini
 
-- home EN desktop/mobile;
-- home NB desktop/mobile;
-- logo e header;
-- slideshow;
-- 8 card completamente cliccabili;
-- 8 tour EN;
-- 8 tour NB;
-- gallerie;
-- frase custom tour;
-- contatti e prezzi;
-- switch EN/NO sulla stessa pagina;
-- URL con trailing slash;
-- build `npm run build` senza errori.
+Resta una dipendenza temporanea importante: molte fotografie provengono ancora dal vecchio WordPress `guideitoscana.com`.
+
+Prima del go-live definitivo occorre:
+
+- recuperare gli originali;
+- copiarli in asset controllati;
+- ottimizzarli;
+- verificare crop desktop/mobile;
+- evitare che la dismissione del vecchio WordPress rompa il nuovo sito.
+
+## Verifica richiesta sul PC locale
+
+Non essendo disponibile un runner di rete in questa sessione, il controllo finale da fare localmente è:
+
+```bash
+npm install
+npm run build
+npm run preview
+```
+
+Dopo il primo build riuscito, aggiungere `package-lock.json` al branch.

@@ -1,43 +1,143 @@
-# Camilla Sinding-Larsen — Guided Tours in Tuscany
+# Camilla Sinding-Larsen — Guide i Toscana
 
-Static GitHub Pages rebuild of the current Guide i Toscana website, adapted to present **Camilla Sinding-Larsen only**.
+Astro rebuild of the Guide i Toscana website, dedicated exclusively to **Camilla Sinding-Larsen**.
 
-## Current phase
+This branch intentionally reproduces the current baseline before the visual redesign. English and Norwegian share the same components and data model, while the generated output remains fully static HTML.
 
-**Baseline / recognizable replica.**
+## Branch
 
-The first version intentionally stays close to the current website in structure, content and imagery. It removes Annika and adapts the copy to a single guide. A separate visual redesign will follow after Camilla has reviewed this baseline.
+Development is currently on:
 
-See [`docs/PROJECT.md`](docs/PROJECT.md) for scope, decisions and the redesign roadmap.
-
-## Structure
-
-- `/index.html` — English homepage
-- `/nb/index.html` — Norwegian homepage
-- `/assets/css/styles.css` — shared styles
-- `/assets/js/main.js` — navigation, slideshow and tour modals
-- `/assets/js/nb-copy.js` — Norwegian modal copy
-- `/.github/workflows/pages.yml` — GitHub Pages deployment
-- `/docs/PROJECT.md` — project notes and roadmap
-
-## Local preview
-
-Because the site is plain static HTML, it can be opened directly or served with any local web server, for example:
-
-```bash
-python -m http.server 8080
+```text
+astro-rebuild
 ```
 
-Then open `http://localhost:8080/`.
+`main` remains the reference implementation of the previous plain HTML/CSS/JS baseline.
 
-## GitHub Pages
+## Stack
 
-The repository includes a deployment workflow. In GitHub repository settings select:
+- Astro 6
+- TypeScript
+- static output / prerendering
+- English + Norwegian
+- vanilla JavaScript only for the mobile menu and hero slideshow
+- no backend
+- no database
+- no CMS yet
+- no GitHub Actions workflow in this branch
 
-`Settings → Pages → Build and deployment → Source → GitHub Actions`
+## Requirements
 
-After Pages is enabled, pushes to `main` deploy automatically.
+Node 22.12 or newer.
+
+The repository includes `.nvmrc`:
+
+```bash
+nvm use
+```
+
+## Local development
+
+```bash
+npm install
+npm run dev
+```
+
+Default local URL:
+
+```text
+http://localhost:4321/
+```
+
+## Production build
+
+```bash
+npm run build
+npm run preview
+```
+
+Astro writes the generated static site to `dist/`.
+
+## Future GitHub Pages build
+
+GitHub Actions is intentionally not configured in this branch while Actions usage is unavailable.
+
+The Astro config already supports the GitHub Pages project path when the environment variable below is set:
+
+```powershell
+$env:GITHUB_PAGES='true'
+npm run build
+```
+
+This activates:
+
+```text
+site = https://cesare-ml.github.io
+base = /camilla-sinding-larsen
+```
+
+A deployment workflow can be added later without changing the site architecture.
+
+## Source structure
+
+```text
+src/
+  components/
+    Header.astro
+    Footer.astro
+    HomePage.astro
+    TourCard.astro
+    TourDetail.astro
+  data/
+    home.ts
+    tours.ts
+  layouts/
+    BaseLayout.astro
+  lib/
+    paths.ts
+  pages/
+    index.astro
+    404.astro
+    sitemap.xml.ts
+    robots.txt.ts
+    nb/index.astro
+    tours/[slug].astro
+    nb/tours/[slug].astro
+  styles/
+    astro.css
+public/
+  assets/
+```
+
+## Tour pages
+
+The eight English and eight Norwegian tour pages are generated from `src/data/tours.ts`. The two languages therefore use the same slugs and the same layout instead of maintaining sixteen independent HTML files.
+
+## SEO baseline
+
+The Astro rebuild includes:
+
+- title and meta description per page;
+- canonical URLs;
+- EN/NB `hreflang` alternates;
+- Open Graph metadata;
+- Twitter card metadata;
+- XML sitemap;
+- robots.txt;
+- a noindex 404 page.
+
+These will use the final production domain once the definitive domain/deployment configuration is chosen.
+
+## CMS
+
+Pages CMS is **not enabled yet**. The next CMS step should be implemented after testing Pages CMS locally. The intended direction is to move future editorial articles into Astro Content Collections so Camilla can write and publish through a visual CMS without interacting with Git.
 
 ## Temporary image dependency
 
-The baseline references images hosted by the existing `guideitoscana.com` WordPress site so the first preview stays visually familiar. Before replacing the old site, move the final image originals into this repository (or another controlled asset host).
+Most tour and hero photographs are still served from the existing `guideitoscana.com` WordPress installation to keep the baseline visually identical. Before the old site is retired, the final selected images must be copied to controlled local assets or another permanent asset host.
+
+## Documentation
+
+- [`docs/ASTRO-MIGRATION.md`](docs/ASTRO-MIGRATION.md)
+- [`docs/GROWTH-SEO-ARCHITECTURE.md`](docs/GROWTH-SEO-ARCHITECTURE.md)
+- [`docs/PROJECT.md`](docs/PROJECT.md)
