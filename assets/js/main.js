@@ -16,11 +16,15 @@
     });
   }
 
-  const tourPathMatch = window.location.pathname.match(/\/tours\/([^/]+)\/?$/);
-  const norwegianTourLink = document.querySelector('.language-switch a[href="../../nb/"]');
-  if (tourPathMatch && norwegianTourLink) {
-    norwegianTourLink.setAttribute('href', `../../nb/tours/${tourPathMatch[1]}/`);
-  }
+  document.querySelectorAll('.tour-card').forEach((card) => {
+    const link = card.querySelector('.tour-link[href]');
+    if (!link) return;
+
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a, button')) return;
+      window.location.assign(link.href);
+    });
+  });
 
   const slides = [...document.querySelectorAll('[data-slide]')];
   const dots = [...document.querySelectorAll('[data-slide-dot]')];
@@ -135,4 +139,15 @@
   document.querySelectorAll('[data-year]').forEach((node) => {
     node.textContent = new Date().getFullYear();
   });
+
+  const englishTourPrefix = '/camilla-sinding-larsen/tours/';
+  const path = window.location.pathname;
+  if (path.includes(englishTourPrefix)) {
+    const slug = path.split(englishTourPrefix)[1]?.split('/')[0];
+    const languageSwitch = document.querySelector('.language-switch');
+    const noLink = languageSwitch ? [...languageSwitch.querySelectorAll('a')].find((link) => link.textContent.trim() === 'NO') : null;
+    if (slug && noLink) {
+      noLink.href = `../../nb/tours/${slug}/`;
+    }
+  }
 })();
